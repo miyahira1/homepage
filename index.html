@@ -5,204 +5,270 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>miyahira1 — Projects</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #0d0f14;
+      --surface:   #161b27;
+      --surface2:  #1e2535;
+      --border:    #252d3e;
+      --border2:   #2e3a52;
+      --accent:    #6c8ef7;
+      --accent2:   #a78bfa;
+      --text:      #e2e8f0;
+      --muted:     #8892a4;
+      --radius:    12px;
+      --radius-sm: 6px;
+      --radius-lg: 20px;
+      --grad:      linear-gradient(135deg, #6c8ef7, #a78bfa);
+      --trans:     0.2s ease;
+    }
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; color-scheme: dark; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0d1117;
-      color: #e6edf3;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 60px 24px 80px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
+    a { color: var(--accent); text-decoration: none; }
+    ::selection { background: rgba(108, 142, 247, 0.3); }
 
-    header {
+    /* Nav */
+    .pg-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 56px;
+      background: rgba(13, 15, 20, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .pg-nav-logo {
+      font-size: 1.05rem; font-weight: 700;
+      background: var(--grad);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .pg-nav-link {
+      font-size: 0.88rem; color: var(--muted);
+      display: flex; align-items: center; gap: 0.35rem;
+      transition: color var(--trans);
+    }
+    .pg-nav-link:hover { color: var(--text); }
+
+    /* Header */
+    .hub-header {
+      padding: calc(56px + 3.5rem) 1.5rem 2.5rem;
       text-align: center;
-      margin-bottom: 56px;
+      position: relative; overflow: hidden;
     }
-
-    header h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      color: #f0f6fc;
-    }
-
-    header p {
-      margin-top: 10px;
-      color: #8b949e;
-      font-size: 1rem;
-    }
-
-    header a.gh-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 14px;
-      color: #58a6ff;
-      text-decoration: none;
-      font-size: 0.9rem;
-    }
-
-    header a.gh-link:hover { text-decoration: underline; }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 20px;
-      width: 100%;
-      max-width: 900px;
-    }
-
-    .card {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 10px;
-      padding: 24px;
-      text-decoration: none;
-      color: inherit;
-      transition: border-color 0.18s, transform 0.18s;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .card:hover {
-      border-color: #58a6ff;
-      transform: translateY(-2px);
-    }
-
-    .card-icon {
-      font-size: 1.6rem;
-      line-height: 1;
-    }
-
-    .card-name {
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: #58a6ff;
-    }
-
-    .card-desc {
-      font-size: 0.875rem;
-      color: #8b949e;
-      flex: 1;
-    }
-
-    .card-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.75rem;
-      color: #3fb950;
-      margin-top: 4px;
-    }
-
-    .card-badge::before {
+    .hub-header::before {
       content: "";
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #3fb950;
-      display: inline-block;
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(108,142,247,0.14), transparent);
+      pointer-events: none;
+    }
+    .hub-title {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.6rem;
+      background: var(--grad);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hub-sub {
+      color: var(--muted); font-size: 1rem;
+      max-width: 420px; margin: 0 auto 1.5rem;
     }
 
+    /* Grid */
+    .hub-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1.5rem 5rem;
+    }
+
+    /* Cards */
+    .tool-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.5rem;
+      display: flex; flex-direction: column; gap: 0.75rem;
+      transition: border-color var(--trans), transform var(--trans), box-shadow var(--trans);
+      text-decoration: none; color: inherit;
+      position: relative; overflow: hidden;
+    }
+    .tool-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(108, 142, 247, 0.15);
+    }
+    .tool-card-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: var(--grad);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; flex-shrink: 0;
+    }
+    .tool-card-title { font-size: 1.05rem; font-weight: 700; }
+    .tool-card-desc  { font-size: 0.86rem; color: var(--muted); flex: 1; }
+    .tool-card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 0.25rem;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex; align-items: center;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px; border: 1px solid var(--border);
+      font-size: 0.74rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted);
+    }
+    .badge-site  { border-color: rgba(108,142,247,0.4); color: var(--accent); }
+    .badge-game  { border-color: rgba(167,139,250,0.4); color: var(--accent2); }
+    .badge-tool  { border-color: rgba(52,211,153,0.4);  color: #34d399; }
+    .badge-note  { border-color: rgba(251,191,36,0.4);  color: #fbbf24; }
+    .badge-wiki  { border-color: rgba(251,191,36,0.4);  color: #fbbf24; }
+
+    .card-cta { font-size: 0.84rem; color: var(--accent); font-weight: 600; }
+
+    /* Footer */
     footer {
-      margin-top: 60px;
-      color: #484f58;
-      font-size: 0.8rem;
-      text-align: center;
+      text-align: center; padding: 2rem;
+      color: var(--muted); font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      .pg-nav { padding: 0 1rem; }
+      .hub-grid { padding: 0 1rem 4rem; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>miyahira1</h1>
-    <p>Public projects hosted on GitHub Pages</p>
-    <a class="gh-link" href="https://github.com/miyahira1" target="_blank" rel="noopener">
+
+  <nav class="pg-nav">
+    <span class="pg-nav-logo">miyahira1</span>
+    <a class="pg-nav-link" href="https://github.com/miyahira1" target="_blank" rel="noopener">
       <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-      github.com/miyahira1
+      GitHub
     </a>
+  </nav>
+
+  <header class="hub-header">
+    <h1 class="hub-title">My Projects</h1>
+    <p class="hub-sub">A collection of live sites, games, and tools — all hosted on GitHub Pages.</p>
   </header>
 
-  <div class="grid">
+  <main class="hub-grid">
 
-    <a class="card" href="https://miyahira1.github.io/publicweb1" target="_blank" rel="noopener">
-      <div class="card-icon">🌐</div>
-      <div class="card-name">publicweb1</div>
-      <div class="card-desc">Public web project</div>
-      <span class="card-badge">Live</span>
+    <a class="tool-card" href="https://miyahira1.github.io/publicweb1" target="_blank" rel="noopener">
+      <div class="tool-card-icon">🌐</div>
+      <div class="tool-card-title">publicweb1</div>
+      <div class="tool-card-desc">Public web playground with games, tools, and notes.</div>
+      <div class="tool-card-footer">
+        <span class="badge badge-site">Site</span>
+        <span class="card-cta">Visit →</span>
+      </div>
     </a>
 
-    <a class="card" href="https://miyahira1.github.io/mysite" target="_blank" rel="noopener">
-      <div class="card-icon">🏠</div>
-      <div class="card-name">mysite</div>
-      <div class="card-desc">Personal site</div>
-      <span class="card-badge">Live</span>
+    <a class="tool-card" href="https://miyahira1.github.io/mysite" target="_blank" rel="noopener">
+      <div class="tool-card-icon">🏠</div>
+      <div class="tool-card-title">mysite</div>
+      <div class="tool-card-desc">Personal site.</div>
+      <div class="tool-card-footer">
+        <span class="badge badge-site">Site</span>
+        <span class="card-cta">Visit →</span>
+      </div>
     </a>
 
-    <a class="card" href="https://miyahira1.github.io/app001" target="_blank" rel="noopener">
-      <div class="card-icon">🚀</div>
-      <div class="card-name">app001</div>
-      <div class="card-desc">Web application</div>
-      <span class="card-badge">Live</span>
+    <a class="tool-card" href="https://miyahira1.github.io/app001" target="_blank" rel="noopener">
+      <div class="tool-card-icon">🚀</div>
+      <div class="tool-card-title">app001</div>
+      <div class="tool-card-desc">Web application.</div>
+      <div class="tool-card-footer">
+        <span class="badge badge-site">App</span>
+        <span class="card-cta">Open →</span>
+      </div>
     </a>
 
-    <a class="card" href="https://miyahira1.github.io/claudeapp001" target="_blank" rel="noopener">
-      <div class="card-icon">🤖</div>
-      <div class="card-name">claudeapp001</div>
-      <div class="card-desc">Claude-powered app</div>
-      <span class="card-badge">Live</span>
+    <a class="tool-card" href="https://miyahira1.github.io/claudeapp001" target="_blank" rel="noopener">
+      <div class="tool-card-icon">🤖</div>
+      <div class="tool-card-title">claudeapp001</div>
+      <div class="tool-card-desc">Claude-powered web app.</div>
+      <div class="tool-card-footer">
+        <span class="badge badge-tool">App</span>
+        <span class="card-cta">Open →</span>
+      </div>
     </a>
 
-    <a class="card" href="https://miyahira1.github.io/intercambia" target="_blank" rel="noopener">
-      <div class="card-icon">🔄</div>
-      <div class="card-name">intercambia</div>
-      <div class="card-desc">Web project</div>
-      <span class="card-badge">Live</span>
+    <a class="tool-card" href="https://miyahira1.github.io/intercambia" target="_blank" rel="noopener">
+      <div class="tool-card-icon">🔄</div>
+      <div class="tool-card-title">intercambia</div>
+      <div class="tool-card-desc">Web project.</div>
+      <div class="tool-card-footer">
+        <span class="badge badge-site">Site</span>
+        <span class="card-cta">Visit →</span>
+      </div>
     </a>
 
-    <a class="card" href="https://miyahira1.github.io/game01" target="_blank" rel="noopener">
-      <div class="card-icon">🎮</div>
-      <div class="card-name">game01</div>
-      <div class="card-desc">Game</div>
-      <span class="card-badge">Live</span>
+    <a class="tool-card" href="https://miyahira1.github.io/game01" target="_blank" rel="noopener">
+      <div class="tool-card-icon">🎮</div>
+      <div class="tool-card-title">game01</div>
+      <div class="tool-card-desc">Game.</div>
+      <div class="tool-card-footer">
+        <span class="badge badge-game">Game</span>
+        <span class="card-cta">Play →</span>
+      </div>
     </a>
 
-    <a class="card" href="https://miyahira1.github.io/publicweb1/games/snake/" target="_blank" rel="noopener">
-      <div class="card-icon">🐍</div>
-      <div class="card-name">Snake</div>
-      <div class="card-desc">Classic Snake game</div>
-      <span class="card-badge">Live</span>
+    <a class="tool-card" href="https://miyahira1.github.io/publicweb1/games/snake/" target="_blank" rel="noopener">
+      <div class="tool-card-icon">🐍</div>
+      <div class="tool-card-title">Snake</div>
+      <div class="tool-card-desc">Classic Snake game, playable in the browser.</div>
+      <div class="tool-card-footer">
+        <span class="badge badge-game">Game</span>
+        <span class="card-cta">Play →</span>
+      </div>
     </a>
 
-    <a class="card" href="https://miyahira1.github.io/publicweb1/tools/kunkunshi/" target="_blank" rel="noopener">
-      <div class="card-icon">🎵</div>
-      <div class="card-name">Kunkunshi</div>
-      <div class="card-desc">Okinawan Sanshin notation</div>
-      <span class="card-badge">Live</span>
+    <a class="tool-card" href="https://miyahira1.github.io/publicweb1/tools/kunkunshi/" target="_blank" rel="noopener">
+      <div class="tool-card-icon">🎵</div>
+      <div class="tool-card-title">Kunkunshi</div>
+      <div class="tool-card-desc">Okinawan Sanshin notation reference and tool.</div>
+      <div class="tool-card-footer">
+        <span class="badge badge-tool">Tool</span>
+        <span class="card-cta">Explore →</span>
+      </div>
     </a>
 
-    <a class="card" href="https://miyahira1.github.io/publicweb1/notes/how-it-works/" target="_blank" rel="noopener">
-      <div class="card-icon">📱</div>
-      <div class="card-name">How It Works</div>
-      <div class="card-desc">Built from a phone, hosted for free</div>
-      <span class="card-badge">Live</span>
+    <a class="tool-card" href="https://miyahira1.github.io/publicweb1/notes/how-it-works/" target="_blank" rel="noopener">
+      <div class="tool-card-icon">📱</div>
+      <div class="tool-card-title">How It Works</div>
+      <div class="tool-card-desc">Built from a phone, hosted for free — the workflow behind these projects.</div>
+      <div class="tool-card-footer">
+        <span class="badge badge-note">Note</span>
+        <span class="card-cta">Read →</span>
+      </div>
     </a>
 
-    <a class="card" href="https://miyahira1.github.io/publicweb1/wikis/" target="_blank" rel="noopener">
-      <div class="card-icon">📚</div>
-      <div class="card-name">LLM Wikis</div>
-      <div class="card-desc">Wiki playground</div>
-      <span class="card-badge">Live</span>
+    <a class="tool-card" href="https://miyahira1.github.io/publicweb1/wikis/" target="_blank" rel="noopener">
+      <div class="tool-card-icon">📚</div>
+      <div class="tool-card-title">LLM Wikis</div>
+      <div class="tool-card-desc">Wiki playground for LLM-related topics.</div>
+      <div class="tool-card-footer">
+        <span class="badge badge-wiki">Wiki</span>
+        <span class="card-cta">Read →</span>
+      </div>
     </a>
 
-  </div>
+  </main>
 
   <footer>
-    &copy; 2026 miyahira1 &mdash; All projects hosted via GitHub Pages
+    &copy; 2026 miyahira1 &mdash; Hosted via GitHub Pages
   </footer>
+
 </body>
 </html>
